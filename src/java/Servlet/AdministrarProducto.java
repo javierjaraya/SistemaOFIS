@@ -7,28 +7,18 @@ package Servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import Controladores.ControlSistema;
-import Dto.ResponseTablaDTO;
-import Dto.UsuarioDTO;
-import com.google.gson.Gson;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-
-import javax.servlet.http.*;
 
 /**
  *
  * @author 
  */
-public class AdministrarUsuario extends HttpServlet {
+public class AdministrarProducto extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,9 +29,9 @@ public class AdministrarUsuario extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-                
+        
         if (request != null && request.isRequestedSessionIdValid() ) {
             String pagina = "";
             String mensaje1 = "";
@@ -49,7 +39,7 @@ public class AdministrarUsuario extends HttpServlet {
 
             if (request.getParameter("accion") != null && !request.getParameter("accion").equals("")) {
                 if (request.getParameter("accion").equals("LISTADO")) {
-                    listarUsuarios(request, response);
+                    //listarUsuarios(request, response);
                 } else if (request.getParameter("accion").equals("GUARDAR")) {
                     //guardarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("AGREGAR")) {
@@ -60,7 +50,7 @@ public class AdministrarUsuario extends HttpServlet {
                     //buscarUsuario(request, response);
                 }
             } else {
-                pagina = "/web/administrarUsuarios.jsp";
+                pagina = "/web/administrarProductos.jsp";
                 ServletContext sc = getServletConfig().getServletContext();
                 RequestDispatcher rdNext = sc.getRequestDispatcher(pagina);
                 rdNext.forward(request, response);
@@ -74,7 +64,6 @@ public class AdministrarUsuario extends HttpServlet {
             RequestDispatcher rdNext = sc.getRequestDispatcher(pagina);
             rdNext.forward(request, response);
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -87,7 +76,8 @@ public class AdministrarUsuario extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -100,7 +90,8 @@ public class AdministrarUsuario extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -113,46 +104,5 @@ public class AdministrarUsuario extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-    private void listarUsuarios(HttpServletRequest req, HttpServletResponse res) {
-        int pagina = 1;
-        try {
-            pagina = Integer.parseInt(req.getParameter("pagina").toString());
-        } catch (Exception e) {
-        }
-
-        String strCant = "25";
-        int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
-        String nombres = req.getParameter("nombres");//Si se quiere buscar por los nombres
-
-        ResponseTablaDTO responseJson = new ResponseTablaDTO();
-        //CODIGO VARIABLE      
-        List<UsuarioDTO> lista = new ArrayList<UsuarioDTO>();
-
-        String where = " where 1=1 ";
-
-        if (nombres != null) {
-            where += " and nombres LIKE '%" + nombres + "%' ";
-        }
-        //SIN FILTRO
-
-        //mas codigo
-        lista = ControlSistema.getInstancia().getControlUsuario().getUsuarios(pagina, cantidad, where);
-
-        //FIN CODIGO VARIABLE
-        int size = lista.size();
-        responseJson.setTotal(size);
-        res.setCharacterEncoding("UTF-8");
-        responseJson.setRows(lista);
-        PrintWriter out;
-        try {
-            Gson gson = new Gson();
-            String jsonOutput = gson.toJson(responseJson);
-            out = res.getWriter();
-            out.println(jsonOutput);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
