@@ -227,7 +227,7 @@ public class AdministrarProducto extends HttpServlet {
             } else if (parameterNames.equals("descripcionProducto")) {
                 descripcionProducto = req.getParameter("descripcionProducto");
             } else if (parameterNames.equals("precio")) {
-                descripcionProducto = req.getParameter("precio");
+                precio = Double.parseDouble(req.getParameter("precio"));
             }
         }
 
@@ -273,8 +273,7 @@ public class AdministrarProducto extends HttpServlet {
             mensaje = "Se a producido un error inesperado.";
         }
 
-        res.setCharacterEncoding(
-                "UTF-8");
+        res.setCharacterEncoding("UTF-8");
         PrintWriter out;
         responseJson.data = producto;
         responseJson.statusText = mensaje;

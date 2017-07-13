@@ -13,6 +13,7 @@
         <!-- CSS Part End-->
         <!-- JS Part Start-->
         <script type="text/javascript" src="/SistemaOFIS/js/jquery-2.2.3.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="/SistemaOFIS/complementos/datatables/jquery.dataTables.js"></script>
         <script type="text/javascript" src="/SistemaOFIS/complementos/jquery-easyui-1.4.2/jquery.easyui.min.js"></script>
         <script type="text/javascript" src="/SistemaOFIS/complementos/menuDespegable/js-menu.js"></script>
         <script type="text/javascript" src="/SistemaOFIS/complementos/bootcomplete/dist/jquery.bootcomplete.js"></script>

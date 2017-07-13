@@ -5,8 +5,13 @@
  */
 package Servlet;
 
+import Controladores.ControlSistema;
+import Dto.CategoriaDTO;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -39,7 +44,7 @@ public class AdministrarCategoria extends HttpServlet {
 
             if (request.getParameter("accion") != null && !request.getParameter("accion").equals("")) {
                 if (request.getParameter("accion").equals("LISTADO")) {
-                    //listarUsuarios(request, response);
+                    listarCategorias(request, response);
                 } else if (request.getParameter("accion").equals("GUARDAR")) {
                     //guardarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("AGREGAR")) {
@@ -104,5 +109,35 @@ public class AdministrarCategoria extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void listarCategorias(HttpServletRequest req, HttpServletResponse res) {
+        int pagina = 1;
+        try {
+            pagina = Integer.parseInt(req.getParameter("pagina").toString());
+        } catch (Exception e) {
+        }
+
+        String strCant = "25";
+        int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
+
+        //CODIGO VARIABLE
+        List<CategoriaDTO> lista = new ArrayList<CategoriaDTO>();
+        String where = "";
+
+        //mas codigo
+        lista = ControlSistema.getInstancia().getControlCategoria().getCategorias(pagina, cantidad, where);
+
+        //FIN CODIGO VARIABLE
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            Gson gson = new Gson();
+            String jsonOutput = gson.toJson(lista);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
