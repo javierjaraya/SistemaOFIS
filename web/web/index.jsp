@@ -9,10 +9,102 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Sistema Ofis</title>    
+        <link href="/SistemaOFIS/img/favicon2.png" rel="icon" />
+        <!-- CSS Part Start-->     
+        <link rel="stylesheet" type="text/css" href="/SistemaOFIS/css/estilos.css" />     
+        <link rel="stylesheet" type="text/css" href="/SistemaOFIS/css/notificaciones.css" />
+        <link rel="stylesheet" type="text/css" href="/SistemaOFIS/complementos/menuDespegable/estilo-menu.css" />        
+        <link rel="stylesheet" type="text/css" href="/SistemaOFIS/complementos/bootcomplete/dist/bootcomplete.css" media="screen" />
+        <!-- CSS Part End-->
+        <!-- JS Part Start-->
+        <script type="text/javascript" src="/SistemaOFIS/js/jquery-2.2.3.min.js"></script>
+        <script type="text/javascript" src="/SistemaOFIS/complementos/jquery-easyui-1.4.2/jquery.easyui.min.js"></script>
+        <script type="text/javascript" src="/SistemaOFIS/complementos/menuDespegable/js-menu.js"></script>
+        <script type="text/javascript" src="/SistemaOFIS/complementos/bootcomplete/dist/jquery.bootcomplete.js"></script>
+        <!-- JS Part End-->
+        <!-- Bootstrap 3.3.6 -->
+        <link rel="stylesheet" type="text/css" href="/SistemaOFIS/complementos/bootstrap/css/bootstrap.css" />
+        <script src="/SistemaOFIS/complementos/bootstrap/js/bootstrap.min.js"></script>        
+        <!-- Usabilidad -->
+        <script src="/SistemaOFIS/js/notificaciones.js"></script>
+        <script src="/SistemaOFIS/js/validarut.js"></script>            
     </head>
-    <body>
-        <h1>Dentro del sistema</h1>
-        <a href="cerrarSesion">Cerrar Session</a>
-    </body>
+    <body background="/SistemaOFIS/img/fondoflor1.jpg">
+        <div class="container" style="background: #fff; margin-top: 20px; border-radius: 5px 5px 0px 0px;">
+            <!-- HEADER -->
+            <div class="row" style="padding: 10px;">
+                <div class="col-md-1">
+                    <a href="#"><img src="/SistemaOFIS/img/log.png" title="Ofis" /></a>
+                </div>
+                <div class="col-md-11">
+                    <div style="text-align: right">
+                        <h8>Bienvenido/a</h8>
+                        <a href="cerrarSesion">Cerrar Session</a>
+                    </div>
+                </div>  
+            </div>
+             
+            <div class="row" style="padding-left: 10px; padding-right: 10px;">                
+                <input type="hidden" value="<%= session.getAttribute("idPerfil")%>" name="idPerfilMenu" id="idPerfilMenu">
+                <div id="menu"></div>
+            </div> 
+
+            <!--cuerpo-->
+            <div class="row">
+                <div class="container">
+                    <div class="col-md-3">
+                        <!--aqui menu lateral-->
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <!--Middle Part Start-->
+                            <div id="content" style="padding-top: 0">    
+                                <!--contenido-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        cargarMenu();
+    });
+    function cargarMenu() {
+        var idPerfil = document.getElementById("idPerfilMenu").value;
+        if (idPerfil == 1) {//admin
+            carga("/SistemaOFIS/menus/menuAdministrador.jsp", "menu");
+        } else if (idPerfil == 2) {//bodega
+            carga("/SistemaOFIS/menus/menuBodega.jsp", "menu");
+        } else if (idPerfil == 3) {//cliente
+            carga("/SistemaOFIS/menus/menuCliente.jsp", "menu");
+        } else {
+            carga("/SistemaOFIS/menus/menuVisitante.jsp", "menu");
+        }
+    }
+
+    function carga(url, id) {
+        //console.log("CARGANDO: " + url + "  en " + id);
+        var pagecnx = createXMLHttpRequest();
+        pagecnx.onreadystatechange = function () {
+            if (pagecnx.readyState == 4 && (pagecnx.status == 200 || window.location.href.indexOf("http") == -1))
+                document.getElementById(id).innerHTML = pagecnx.responseText;
+        }
+        pagecnx.open('GET', url, true)
+        pagecnx.send(null)
+    }
+
+    function createXMLHttpRequest() {
+        var xmlHttp = null;
+        if (window.ActiveXObject)
+            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+        else if (window.XMLHttpRequest)
+            xmlHttp = new XMLHttpRequest();
+        return xmlHttp;
+    }
+</script>
 </html>
+
+
