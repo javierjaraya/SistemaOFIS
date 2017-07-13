@@ -6,21 +6,21 @@
 
 <%@ include file="header.jsp" %>  
 
-<div class="col-md-12" style="padding: 5px; border: orangered 1px solid; border-radius: 15px; text-align: center; margin-bottom: 20px;">
+<div class="col-md-12" style="padding: 5px; border: green 1px solid; border-radius: 15px; text-align: center; margin-bottom: 20px;">
     <h4 class="TextoTituloFormulario"><strong>ADMINISTRAR PRODUCTOS</strong></h4>
 </div>
 
-<div class="col-md-12" id="subContenedor" style=" padding: 3%; align-content: center; border: orangered 1px solid; border-radius: 15px; margin-bottom: 20px;">
+<div class="col-md-12" id="subContenedor" style=" padding: 3%; align-content: center; border: green 1px solid; border-radius: 15px; margin-bottom: 20px;">
     <div class="col-md-6">
         <h5><strong>PRODUCTOS</strong></h5>
     </div>
     <div class="col-md-6">
         <form class="form-inline">            
-            <a onclick="agregarProducto()" class="btn btn-warning btn-sm" style="float: right;">Agregar Producto</a>
+            <a onclick="agregarProducto()" class="btn btn-success btn-sm" style="float: right;">Agregar Producto</a>
         </form>        
     </div>
     <div class="col-md-12">
-        <hr style="border: orangered 1px solid;">
+        <hr style="border: green 1px solid;">
         <div id="alert"></div>    
     </div>    
     <div class="col-md-12">
@@ -50,13 +50,13 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <section id="panel-modal">
-                <div class="modal-header" style=" border: orangered 1px solid; border-radius: 15px; text-align: center ; margin:  1%;">
+                <div class="modal-header" style=" border: green 1px solid; border-radius: 15px; text-align: center ; margin:  1%;">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <img id="logo-modal" src="/SistemaOFIS/img/log.png" width="60px" style="float: left;">
                     <label class="titulo-modal" style="width: 200px; padding-top: 20px;"><h4 class="modal-title" id="modalLabel"></h4></label>
                 </div>
                 <form id="fm" method="POST" class="form-horizontal" enctype="multipart/form-data">
-                    <div style="margin: 1%; align-content: center; border: orangered 1px solid; border-radius: 15px;">
+                    <div style="margin: 1%; align-content: center; border: green 1px solid; border-radius: 15px;">
                         <div class="modal-body">
                             <section class="row"> 
                                 <div id="alert-modal"></div>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="modal-footer">
                             <a class="btn btn-default" data-dismiss="modal">Cancelar</a>
-                            <a class="btn btn-warning" onclick="guardar()">Guardar</a>
+                            <a class="btn btn-success" onclick="guardar()">Guardar</a>
                         </div>   
                     </div>             
                 </form>
@@ -198,7 +198,6 @@
         );
     }
 
-
     function cargarCategorias() {
         $("#idCategoria").empty();
         var url_json = '/SistemaOFIS/administrarCategoria?accion=LISTADO';
@@ -214,7 +213,7 @@
 
     function editar(id) {
         document.getElementById("fm").reset();
-        document.getElementById('accion').value = "ACTUALIZAR";
+        document.getElementById('accion').value = "GUARDAR";
         document.getElementById('idProducto').value = id;
         $('#modalLabel').html("Editar Producto");
         $('#dg-modela').modal(this)//CALL MODAL MENSAJE                                    
@@ -224,22 +223,23 @@
     function rellenarFormulario(id) {
         document.getElementById('imagen').style.display = 'none';
         document.getElementById('imagenPrevisualizada').style.display = 'block';
-        var url_json = '../Servlet/administrarProducto.php';
+        var url_json = "/SistemaOFIS/administrarProducto";
         $.ajax({
             type: "POST",
             url: url_json,
             data: 'accion=BUSCAR_BY_ID&idProducto=' + id,
             success: function (data) {
                 var data = eval('(' + data + ')');
-                document.getElementById('idProducto').value = data.idProducto;
-                document.getElementById('nombreProducto').value = data.nombreProducto;
-                document.getElementById('descripcionProducto').value = data.descripcionProducto;
-                document.getElementById('stock').value = data.stock;
-                document.getElementById('precio').value = data.precio;
-                document.getElementById('idCategoria').value = data.idCategoria;
-                document.getElementById('imagenPrevisualizada').innerHTML = "<img src='../../" + data.imagen.rutaImagen + "' width='75px' height='75px'>&nbsp;&nbsp;<a class='btn btn-danger btn-xs glyphicon glyphicon-remove'  onclick='borrarPrevisualizacion()'></a>";
-                document.getElementById('idImagen').value = data.imagen.idImagen;
+
+                document.getElementById('idProducto').value = data.data.idProducto;
+                document.getElementById('nombreProducto').value = data.data.nombreProducto;
+                document.getElementById('descripcionProducto').value = data.data.descripcionProducto;
+                document.getElementById('stock').value = data.data.stock;
+                document.getElementById('precio').value = data.data.precio;
+                document.getElementById('idCategoria').value = data.data.idCategoria;
+                document.getElementById('imagenPrevisualizada').innerHTML = "<img src='/SistemaOFIS/img/productos/images.png' width='75px' height='75px'>&nbsp;&nbsp;<a class='btn btn-danger btn-xs glyphicon glyphicon-remove'  onclick='borrarPrevisualizacion()'></a>";
                 document.getElementById('imagenRemplazada').value = "FALSE";
+
             }
         });
     }
@@ -262,13 +262,15 @@
 
     function guardar() {
         if (validar()) {
-            var url = "/SistemaOFIS/administrarProducto?accion=AGREGAR&" + $("#fm").serialize();
+            var url = "/SistemaOFIS/administrarProducto?" + $("#fm").serialize();
+            console.log(url);
             $('#fm').form('submit', {
                 url: url,
                 onSubmit: function () {
                     return $(this).form('validate');
                 },
                 success: function (datos) {
+                    console.log(datos);
                     var datos = eval('(' + datos + ')');
                     if (datos.success) {
                         $('#dg-modela').modal('hide')
@@ -276,7 +278,7 @@
                         cargar();
                     } else {
                         $('#dg-modela').modal('hide')
-                        notificacion(datos.statusText, 'danger', 'alert');                        
+                        notificacion(datos.statusText, 'danger', 'alert');
                     }
                 }
             });
@@ -326,7 +328,6 @@
     }
 
     function confirmacion(titulo, mensaje) {
-        document.getElementById('logo-confirmacion').src = "../../Files/img/log.png";
         $('#titulo-confirmacion').html(titulo);
         $('#contenedor-confirmacion').html(mensaje);
         $('#dg-confirmacion').modal(this)//CALL MODAL MENSAJE
@@ -339,16 +340,22 @@
 
     function confirmarBorrar() {
         var id = document.getElementById('idProductoEliminar').value;
-        $.post('../Servlet/administrarProducto.php?accion=BORRAR', {idProducto: id}, function (result) {
-            if (result.success) {
-                $('#dg-confirmacion').modal('toggle'); //Cerrar Modal
-                cargar();//Refrescamos la tabla
-                notificacion(result.mensaje, 'success', 'alert');
-            } else {
-                $('#dg-confirmacion').modal('toggle'); //Cerrar Modal
-                notificacion(result.errorMsg, 'danger', 'alert');
+
+        var url_json = "/SistemaOFIS/administrarProducto?accion=BORRAR&idProducto=" + id;
+        $.ajax({
+            type: "POST",
+            url: url_json,
+            success: function (result) {                
+                if (result.success) {
+                    $('#dg-modela').modal('hide')
+                    notificacion(result.statusText, 'success', 'alert');
+                    cargar();
+                } else {
+                    $('#dg-modela').modal('hide')
+                    notificacion(result.statusText, 'danger', 'alert');
+                }
             }
-        }, 'json');
+        });
     }
 
     function ver(idCategoria) {

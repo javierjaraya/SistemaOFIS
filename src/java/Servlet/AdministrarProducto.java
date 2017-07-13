@@ -65,6 +65,8 @@ public class AdministrarProducto extends HttpServlet {
                     borrarProducto(request, response);
                 } else if (request.getParameter("accion").equals("BUSCAR")) {
                     buscarProducto(request, response);
+                } else if (request.getParameter("accion").equals("BUSCAR_BY_ID")) {
+                    buscarProductoByID(request, response);
                 }
             } else {
                 pagina = "/web/administrarProductos.jsp";
@@ -171,7 +173,7 @@ public class AdministrarProducto extends HttpServlet {
             } else if (parameterNames.equals("descripcionProducto")) {
                 descripcionProducto = req.getParameter("descripcionProducto");
             } else if (parameterNames.equals("precio")) {
-                descripcionProducto = req.getParameter("precio");
+                precio = Double.parseDouble(req.getParameter("precio"));
             }
         }
         ProductoDTO producto = new ProductoDTO();
@@ -289,12 +291,13 @@ public class AdministrarProducto extends HttpServlet {
     }
 
     private void borrarProducto(HttpServletRequest req, HttpServletResponse res) {
-        int idProducto = Integer.parseInt(req.getParameter("idProducto"));
-
+        int idProducto = Integer.parseInt(req.getParameter("idProducto"));        
+        
         ResponseDTO responseJson = new ResponseDTO();
         String mensaje = "";
 
         responseJson.success = ControlSistema.getInstancia().getControlProducto().eliminarProducto(idProducto);
+        
         if (responseJson.success == true) {
             responseJson.statusCode = 1;
             mensaje = "El producto fue eliminado correctamente.";
@@ -348,6 +351,51 @@ public class AdministrarProducto extends HttpServlet {
         responseJson.setTotal(size);
         res.setCharacterEncoding("UTF-8");
         responseJson.setRows(lista);
+        PrintWriter out;
+        try {
+            Gson gson = new Gson();
+            String jsonOutput = gson.toJson(responseJson);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void buscarProductoByID(HttpServletRequest req, HttpServletResponse res) {
+        int idProducto = 0;
+        String parameterNames = "";
+        for (Enumeration e = req.getParameterNames(); e.hasMoreElements();) {
+            parameterNames = (String) e.nextElement();
+            if (parameterNames.equals("idProducto")) {
+                idProducto = Integer.parseInt(req.getParameter("idProducto"));
+            }
+        }
+
+        int pagina = 1;
+        try {
+            pagina = Integer.parseInt(req.getParameter("pagina").toString());
+        } catch (Exception e) {
+        }
+
+        String strCant = "25";
+        int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
+
+        ResponseDTO responseJson = new ResponseDTO();
+        //CODIGO VARIABLE
+        List<ProductoDTO> lista = new ArrayList<ProductoDTO>();
+        String where = " WHERE p.idProducto = " + idProducto + " ";
+
+        //mas codigo
+        lista = ControlSistema.getInstancia().getControlProducto().getProductos(pagina, cantidad, where);
+
+        ProductoDTO producto = new ProductoDTO();
+        producto = lista.get(0);
+        
+        //FIN CODIGO VARIABLE
+        int size = lista.size();
+        res.setCharacterEncoding("UTF-8");
+        responseJson.data = producto;
         PrintWriter out;
         try {
             Gson gson = new Gson();
