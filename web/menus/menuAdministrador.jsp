@@ -5,7 +5,7 @@
 --%>
 
 <ul>
-    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"></i>&nbsp;Ventas</a></li>
+    <li class="dropdown" ><a class="dropdown-toggle" data-toggle="dropdown"  href="#"></i>&nbsp;Ventas</a></li>
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#"></i>&nbsp;Usuarios</a>
         <ul class="dropdown-menu">
