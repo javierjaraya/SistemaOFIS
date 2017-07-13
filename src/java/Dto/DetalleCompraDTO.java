@@ -15,6 +15,8 @@ public class DetalleCompraDTO {
     public int idProducto;
     public double precio;
     public int cantidad;
+    
+    public String nombreProducto;
 
     public DetalleCompraDTO() {
     }
@@ -66,4 +68,14 @@ public class DetalleCompraDTO {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+    
+    
 }

@@ -16,6 +16,8 @@ public class ProductoDTO {
     public int stock;
     public double precio;
     public int idCategora;
+    
+    public String nombreCategoria;
 
     public ProductoDTO() {
     }
@@ -76,6 +78,14 @@ public class ProductoDTO {
     public void setIdCategora(int idCategora) {
         this.idCategora = idCategora;
     }
+
+    public String getNombreCategoria() {
+        return nombreCategoria;
+    }
+
+    public void setNombreCategoria(String nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
+    }
     
-    
+  
 }
