@@ -124,7 +124,7 @@ public class AdministrarSolicitudRegistro extends HttpServlet {
         String where = "";
 
         //mas codigo
-        lista = ControlSistema.getInstancia().getControlSolicitudRegistro().getSolicitudesRegistro(pagina, cantidad, where);
+        //lista = ControlSistema.getInstancia().getControlSolicitudRegistro().getSolicitudesRegistro(pagina, cantidad, where);
 
         //FIN CODIGO VARIABLE
         res.setCharacterEncoding("UTF-8");
