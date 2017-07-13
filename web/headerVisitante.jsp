@@ -45,11 +45,8 @@
 
             <!--cuerpo-->
             <div class="row">
-                <div class="container">
-                    <div class="col-md-3">
-                        <!--aqui menu lateral-->
-                    </div>
-                    <div class="col-md-9">
+                <div class="container">                    
+                    <div class="col-md-12">
                         <div class="row">
                             <!--Middle Part Start-->
-                            <div id="content" style="padding-top: 0">    
+                            <div id="content" style="padding-top: 0; padding: 2%">    
