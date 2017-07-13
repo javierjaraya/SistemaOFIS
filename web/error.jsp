@@ -5,6 +5,5 @@
 --%>
 
 <%@ include file="headerVisitante.jsp" %>  
-<h1>pagina de error</h1>
-
+<h1>Ha ocurrido un error, comuníquese con el administrador</h1>
 <%@ include file="footerVisitante.jsp" %>  

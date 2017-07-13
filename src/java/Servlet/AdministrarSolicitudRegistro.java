@@ -5,8 +5,13 @@
  */
 package Servlet;
 
+import Controladores.Mantenedores.ControladorSolicitudRegistroDAO;
+import Controladores.ControlSistema;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -104,5 +109,34 @@ public class AdministrarSolicitudRegistro extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    private void listarSolicitudesRegistro(HttpServletRequest req, HttpServletResponse res) {
+        int pagina = 1;
+        try {
+            pagina = Integer.parseInt(req.getParameter("pagina").toString());
+        } catch (Exception e) {
+        }
+
+        String strCant = "25";
+        int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
+
+        //CODIGO VARIABLE
+        List<ControladorSolicitudRegistroDAO> lista = new ArrayList<ControladorSolicitudRegistroDAO>();
+        String where = "";
+
+        //mas codigo
+        lista = ControlSistema.getInstancia().getControlSolicitudRegistro().getSolicitudesRegistro(pagina, cantidad, where);
+
+        //FIN CODIGO VARIABLE
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            Gson gson = new Gson();
+            String jsonOutput = gson.toJson(lista);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

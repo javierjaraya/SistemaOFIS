@@ -6,12 +6,6 @@
 
 <ul>
     <li class="dropdown" ><a href="administrarCompra"></i>&nbsp;Ventas</a></li>
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#"></i>&nbsp;Usuarios</a>
-        <ul class="dropdown-menu">
-            <li><a href="administrarUsuario">Administrar Usuarios</a></li>   
-            <li><a href="#">Registrar Usuarios</a></li>   
-        </ul>
-    </li>
+    <li class="dropdown"><a href="administrarSolicitudRegistro">Administrar Solicitudes de Ingreso</a></li>
     <li class="dropdown"> <a href="administrarProducto"></i>&nbsp;Productos</a></li>
 </ul>

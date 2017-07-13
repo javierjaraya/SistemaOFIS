@@ -23,7 +23,7 @@
                 <div class="form-group">
                     <label for="inputPassword" class="col-sm-4 control-label">Contraseña</label>
                     <div class="col-sm-6">
-                         <input type="password" class="form-control"  name="clave" id="clave" placeholder="Contraseña" />
+                         <input type="password" class="form-control"  name="clave" id="clave" placeholder="Contraseña"/>
                     </div>
                 </div>
                 <!--<div class="form-group">
@@ -44,5 +44,9 @@
         </div>
     </div>
 </div>
-
+<script>
+    $(function () {
+        notificacion("Debe ingresar datos válidos", 'warning', 'alert');
+    });
+</script>
 <%@ include file="footerVisitante.jsp" %>     
