@@ -96,4 +96,19 @@ public class ControladorUsuarioDAO extends Controlador {
         return retorno;
     }
     
+    public boolean actualizarUsuario(UsuarioDTO usuario) {
+        int res = conector.executeUpdate("UPDATE usuario SET nombres = ?, apellidos = ?, correoElectronico = ?, telefono = ? , sexo = ?, direccion = ?, clave = ?, idPerfil = ?, tipoUsuario = ?, estado = ? WHERE run = ? ", usuario.getNombres(), usuario.getApellidos(), usuario.getCorreoElectronico(), usuario.getTelefono(),usuario.getSexo(), usuario.getDireccion(), usuario.getClave(), usuario.getIdPerfil(), usuario.getTipoUsuario(), usuario.getEstado(), usuario.getRun());
+        return res == 1;
+    }
+    
+    public boolean eliminarUsuario(String run) {
+        int res = conector.executeUpdate("DELETE FROM usuario WHERE run = ?", run);
+        return res == 1;
+    }
+
+    public boolean insertarUsuario(UsuarioDTO usuario) {
+        int res = conector.executeInsert("INSERT INTO usuario (run, nombres, apellidos, correoElectronico, telefono, sexo, direccion, clave, idPerfil, tipoUsuario, estado) VALUES (?,?,?,?,?,?,?,?,?,?,?)", usuario.getRun(), usuario.getNombres(), usuario.getApellidos(), usuario.getCorreoElectronico(), usuario.getTelefono(),usuario.getSexo(), usuario.getDireccion(), usuario.getClave(), usuario.getIdPerfil(), usuario.getTipoUsuario(), usuario.getEstado());        
+        return res > 0;
+    }
+    
 }
