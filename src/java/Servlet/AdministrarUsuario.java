@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Controladores.ControlSistema;
-import Controladores.Mantenedores.ControladorUsuarioDAO;
 import Dto.ResponseTablaDTO;
 import Dto.UsuarioDTO;
 import com.google.gson.Gson;
@@ -23,11 +22,12 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
+import javax.servlet.http.*;
+
 /**
  *
  * @author 
  */
-@WebServlet(name = "AdministrarUsuario", urlPatterns = {"/AdministrarUsuario"})
 public class AdministrarUsuario extends HttpServlet {
 
     /**
@@ -41,7 +41,9 @@ public class AdministrarUsuario extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String pagina = "";
+                
+        if (request != null && request.isRequestedSessionIdValid() ) {
+            String pagina = "";
             String mensaje1 = "";
             String mensaje2 = "";
 
@@ -58,11 +60,21 @@ public class AdministrarUsuario extends HttpServlet {
                     //buscarUsuario(request, response);
                 }
             } else {
-                pagina = "/web/administracion/usuarios/administrarUsuario.jsp";
+                pagina = "/web/administrarUsuario.jsp";
                 ServletContext sc = getServletConfig().getServletContext();
                 RequestDispatcher rdNext = sc.getRequestDispatcher(pagina);
                 rdNext.forward(request, response);
             }
+        } else {
+            System.out.println(">>>>> Sesion invalida");
+            String pagina = "/error.jsp";
+            request.getSession().setAttribute("mensajeLogin", "Sesión invalida.");
+            request.getSession().setAttribute("flagResultado", "false");
+            ServletContext sc = getServletConfig().getServletContext();
+            RequestDispatcher rdNext = sc.getRequestDispatcher(pagina);
+            rdNext.forward(request, response);
+        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -103,19 +115,18 @@ public class AdministrarUsuario extends HttpServlet {
     }// </editor-fold>
     
     private void listarUsuarios(HttpServletRequest req, HttpServletResponse res) {
-        int fila = 1;
+        int pagina = 1;
         try {
-            fila = Integer.parseInt(req.getParameter("fila").toString());
+            pagina = Integer.parseInt(req.getParameter("pagina").toString());
         } catch (Exception e) {
         }
 
-        String strCant = req.getSession().getAttribute("registros_paginacion").toString();
+        String strCant = "25";
         int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
-        String nombres = req.getParameter("nombres");
+        String nombres = req.getParameter("nombres");//Si se quiere buscar por los nombres
 
         ResponseTablaDTO responseJson = new ResponseTablaDTO();
-        //CODIGO VARIABLE
-        ControladorUsuarioDAO cUsuario = new ControladorUsuarioDAO();
+        //CODIGO VARIABLE      
         List<UsuarioDTO> lista = new ArrayList<UsuarioDTO>();
 
         String where = " where 1=1 ";
@@ -126,7 +137,7 @@ public class AdministrarUsuario extends HttpServlet {
         //SIN FILTRO
 
         //mas codigo
-        lista = cUsuario.getUsuarios(fila, cantidad, where);
+        lista = ControlSistema.getInstancia().getControlUsuario().getUsuarios(pagina, cantidad, where);
 
         //FIN CODIGO VARIABLE
         int size = lista.size();

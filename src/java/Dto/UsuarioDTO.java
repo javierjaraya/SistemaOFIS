@@ -21,6 +21,8 @@ public class UsuarioDTO {
     public int idPerfil;
     public String tipoUsuario;
     public int estado;
+    
+    public String nombrePerfil;
 
     public UsuarioDTO() {
     }
@@ -126,6 +128,15 @@ public class UsuarioDTO {
     public void setEstado(int estado) {
         this.estado = estado;
     }
+
+    public String getNombrePerfil() {
+        return nombrePerfil;
+    }
+
+    public void setNombrePerfil(String nombrePerfil) {
+        this.nombrePerfil = nombrePerfil;
+    }
+    
     
     
 }
