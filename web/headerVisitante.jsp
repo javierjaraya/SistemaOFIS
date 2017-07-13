@@ -33,8 +33,7 @@
                 </div>
                 <div class="col-md-11">
                     <div style="text-align: right">
-                        <h8>Bienvenido/a</h8>
-                        <a href="cerrarSesion">Cerrar Session</a>
+                        <h8>Bienvenido/a visitante</h8>
                     </div>
                 </div>  
             </div>

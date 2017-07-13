@@ -57,7 +57,7 @@ public class ControladorProductoDAO extends Controlador {
                     producto.setDescripcionProducto(res.getString("descripcionProducto"));
                     producto.setStock(res.getInt("stock"));
                     producto.setPrecio(res.getDouble("precio"));
-                    producto.setIdCategora(res.getInt("idCategoria"));
+                    producto.setIdCategoria(res.getInt("idCategoria"));
                     producto.setNombreCategoria(res.getString("nombreCategoria"));
 
                 } catch (Exception ex) {
@@ -91,7 +91,7 @@ public class ControladorProductoDAO extends Controlador {
                     producto.setDescripcionProducto(res.getString("descripcionProducto"));
                     producto.setStock(res.getInt("stock"));
                     producto.setPrecio(res.getDouble("precio"));
-                    producto.setIdCategora(res.getInt("idCategoria"));
+                    producto.setIdCategoria(res.getInt("idCategoria"));
                     producto.setNombreCategoria(res.getString("nombreCategoria"));
 
                     retorno.add(producto);
@@ -111,7 +111,7 @@ public class ControladorProductoDAO extends Controlador {
     }
     
     public boolean actualizarProducto(ProductoDTO producto) {
-        int res = conector.executeUpdate("UPDATE producto SET nombreProducto = ?, descripcionProducto = ?, stock = ?, precio = ? , idCategoria = ? WHERE idProducto = ? ", producto.getNombreProducto(), producto.getDescripcionProducto(), producto.getStock(), producto.getPrecio(),producto.getIdCategora(), producto.getIdProducto());
+        int res = conector.executeUpdate("UPDATE producto SET nombreProducto = ?, descripcionProducto = ?, stock = ?, precio = ? , idCategoria = ? WHERE idProducto = ? ", producto.getNombreProducto(), producto.getDescripcionProducto(), producto.getStock(), producto.getPrecio(),producto.getIdCategoria(), producto.getIdProducto());
         return res == 1;
     }
     
@@ -121,7 +121,7 @@ public class ControladorProductoDAO extends Controlador {
     }
 
     public boolean insertarProducto(ProductoDTO producto) {
-        int res = conector.executeInsert("INSERT INTO producto (idProducto, nombreProducto, descripcionProducto, stock, precio, idCategoria) VALUES (?,?,?,?,?,?)", producto.getIdProducto(), producto.getNombreProducto(), producto.getDescripcionProducto(),producto.getStock(), producto.getPrecio(),producto.getIdCategora());
+        int res = conector.executeInsert("INSERT INTO producto (idProducto, nombreProducto, descripcionProducto, stock, precio, idCategoria) VALUES (?,?,?,?,?,?)", producto.getIdProducto(), producto.getNombreProducto(), producto.getDescripcionProducto(),producto.getStock(), producto.getPrecio(),producto.getIdCategoria());
         return res > 0;
     }
     

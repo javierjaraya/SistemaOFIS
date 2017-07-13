@@ -5,6 +5,7 @@
  */
 package Servlet;
 
+import Dto.CarroCompraDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -38,16 +39,20 @@ public class AdministrarCarroCompra extends HttpServlet {
             String mensaje2 = "";
 
             if (request.getParameter("accion") != null && !request.getParameter("accion").equals("")) {
-                if (request.getParameter("accion").equals("LISTADO")) {
-                    //listarUsuarios(request, response);
-                } else if (request.getParameter("accion").equals("GUARDAR")) {
-                    //guardarUsuario(request, response);
+                if (request.getParameter("accion").equals("GUARDAR")) {
+                    guardar(request, response);
                 } else if (request.getParameter("accion").equals("AGREGAR")) {
-                    //agregarUsuario(request, response);
+                    agregar(request, response);
                 } else if (request.getParameter("accion").equals("BORRAR")) {
-                    //borrarUsuario(request, response);
-                } else if (request.getParameter("accion").equals("BUSCAR")) {
-                    //buscarUsuario(request, response);
+                    borrar(request, response);
+                } else if (request.getParameter("accion").equals("OBTENER_TOTAL_CARRO")) {
+                    obtenerTotalCarro(request, response);
+                } else if (request.getParameter("accion").equals("OBTENER_CARRO")) {
+                    obtenerCarro(request, response);
+                } else if (request.getParameter("accion").equals("OBTENER_CARRO_CONFIRMACION")) {
+                    obtenerCarroConfirmacion(request, response);
+                } else if (request.getParameter("accion").equals("VACIAR_CARRO")) {
+                    vaciarCarro(request, response);
                 }
             } else {
                 pagina = "/web/administrarCarroCompra.jsp";
@@ -104,5 +109,45 @@ public class AdministrarCarroCompra extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void guardar(HttpServletRequest request, HttpServletResponse response) {
+        
+    }
+
+    private void agregar(HttpServletRequest req, HttpServletResponse res) {
+        CarroCompraDTO carrito;
+        if(req.getSession().getAttribute("carrito") == null){
+            carrito = new CarroCompraDTO();
+            req.getSession().setAttribute("carrito", carrito);
+        }else{
+            carrito = (CarroCompraDTO) req.getSession().getAttribute("carrito");
+        }
+        
+        int idProducto = Integer.parseInt(req.getParameter("idProducto"));
+        int cantidad = Integer.parseInt(req.getParameter("cantidad"));
+        
+        
+    }
+
+    private void borrar(HttpServletRequest request, HttpServletResponse response) {
+        
+    }
+
+    private void obtenerTotalCarro(HttpServletRequest request, HttpServletResponse response) {
+        
+    }
+
+    private void obtenerCarroConfirmacion(HttpServletRequest request, HttpServletResponse response) {
+        
+    }
+
+    private void vaciarCarro(HttpServletRequest request, HttpServletResponse response) {
+        
+    }
+
+    private void obtenerCarro(HttpServletRequest request, HttpServletResponse response) {
+        
+    }
+    
 
 }

@@ -1,7 +1,7 @@
 <%-- 
     Document   : menuvisitante
     Created on : 13-07-2017, 12:00:56
-    Author     : Joseline Cisternas
+    Author     : 
 --%>
 
 <ul>
