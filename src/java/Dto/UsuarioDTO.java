@@ -15,7 +15,7 @@ public class UsuarioDTO {
     public String apellidos;
     public String correoElectronico;
     public int telefono;
-    public char sexo;
+    public String sexo;
     public String direccion;
     public String clave;
     public int idPerfil;
@@ -27,7 +27,7 @@ public class UsuarioDTO {
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(String run, String nombres, String apellidos, String correoElectronico, int telefono, char sexo, String direccion, String clave, int idPerfil, String tipoUsuario, int estado) {
+    public UsuarioDTO(String run, String nombres, String apellidos, String correoElectronico, int telefono, String sexo, String direccion, String clave, int idPerfil, String tipoUsuario, int estado) {
         this.run = run;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -81,11 +81,11 @@ public class UsuarioDTO {
         this.telefono = telefono;
     }
 
-    public char getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
-    public void setSexo(char sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 

@@ -199,7 +199,7 @@ public class AdministrarUsuario extends HttpServlet {
         usuario.setDireccion(direccion);
         usuario.setClave(clave);
         usuario.setTipoUsuario(tipoUsuario);
-        usuario.setSexo(sexo.charAt(0));
+        usuario.setSexo(sexo);
 
         ResponseDTO responseJson = new ResponseDTO();
         String mensaje = "";
@@ -270,7 +270,7 @@ public class AdministrarUsuario extends HttpServlet {
         usuario.setDireccion(direccion);
         usuario.setClave(clave);
         usuario.setTipoUsuario(tipoUsuario);
-        usuario.setSexo(sexo.charAt(0));
+        usuario.setSexo(sexo);
 
         ResponseDTO responseJson = new ResponseDTO();
         String mensaje = "";

@@ -32,7 +32,7 @@ public class ControladorUsuarioDAO extends Controlador {
                     usuario.setApellidos(res.getString("apellidos"));
                     usuario.setCorreoElectronico(res.getString("correoElectronico"));
                     usuario.setTelefono(res.getInt("telefono"));
-                    usuario.setSexo(res.getString("sexo").charAt(0));
+                    usuario.setSexo(res.getString("sexo"));
                     usuario.setDireccion(res.getString("direccion"));
                     usuario.setClave(res.getString("clave"));
                     usuario.setIdPerfil(res.getInt("idPerfil"));
@@ -72,7 +72,7 @@ public class ControladorUsuarioDAO extends Controlador {
                     usuario.setApellidos(res.getString("apellidos"));
                     usuario.setCorreoElectronico(res.getString("correoElectronico"));
                     usuario.setTelefono(res.getInt("telefono"));
-                    usuario.setSexo(res.getString("sexo").charAt(0));
+                    usuario.setSexo(res.getString("sexo"));
                     usuario.setDireccion(res.getString("direccion"));
                     usuario.setClave(res.getString("clave"));
                     usuario.setIdPerfil(res.getInt("idPerfil"));

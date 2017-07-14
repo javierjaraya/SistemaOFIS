@@ -41,10 +41,10 @@
                 <label class="col-sm-3 control-label" for="sexo">Sexo (*)</label>
                 <div class="col-sm-6">
                     <div class="col-md-3">
-                        <input  type="radio" id="sexoM" name="sexo" value="Masculino" checked="checked" >&nbsp;&nbsp;Masculino
+                        <input  type="radio" id="sexoM" name="sexo" value="M" checked="checked" >&nbsp;&nbsp;Masculino
                     </div>
                     <div class="col-md-3">
-                        <input  type="radio" id="sexoF" name="sexo" value="Femenino" >&nbsp;&nbsp;Femenino
+                        <input  type="radio" id="sexoF" name="sexo" value="F" >&nbsp;&nbsp;Femenino
                     </div>
                 </div>  
             </div>
