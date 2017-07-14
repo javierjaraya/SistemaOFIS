@@ -14,7 +14,9 @@ import Dto.UsuarioDTO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -47,7 +49,7 @@ public class AdministrarCompra extends HttpServlet {
 
             if (request.getParameter("accion") != null && !request.getParameter("accion").equals("")) {
                 if (request.getParameter("accion").equals("LISTADO")) {
-                    //listarUsuarios(request, response);
+                    listarCompras(request, response);
                 } else if (request.getParameter("accion").equals("GUARDAR")) {
                     //guardarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("AGREGAR")) {
@@ -56,6 +58,8 @@ public class AdministrarCompra extends HttpServlet {
                     //borrarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("BUSCAR")) {
                     //buscarUsuario(request, response);
+                } else if (request.getParameter("accion").equals("BUSCAR_BY_ID")) {
+                    buscarCompraByID(request, response);
                 }
             } else {
                 pagina = "/web/administrarCampras.jsp";
@@ -179,6 +183,73 @@ public class AdministrarCompra extends HttpServlet {
         try {
             Gson gson = new Gson();
             String jsonOutput = gson.toJson(responseJson);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void listarCompras(HttpServletRequest req, HttpServletResponse res) {
+        int pagina = 1;
+        try {
+            pagina = Integer.parseInt(req.getParameter("pagina").toString());
+        } catch (Exception e) {
+        }
+
+        String strCant = "25";
+        int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
+
+        //CODIGO VARIABLE
+        List<CompraDTO> lista = new ArrayList<CompraDTO>();
+        String where = "";
+
+        //mas codigo
+        lista = ControlSistema.getInstancia().getControlCompra().getCompras(pagina, cantidad, where);
+
+        //FIN CODIGO VARIABLE
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            Gson gson = new Gson();
+            String jsonOutput = gson.toJson(lista);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void buscarCompraByID(HttpServletRequest req, HttpServletResponse res) {
+        int pagina = 1;
+        try {
+            pagina = Integer.parseInt(req.getParameter("pagina").toString());
+        } catch (Exception e) {
+        }
+
+        int idCompra = Integer.parseInt(req.getParameter("idCompra").toString());
+
+        String strCant = "25";
+        int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
+
+        //CODIGO VARIABLE
+        List<CompraDTO> lista = new ArrayList<CompraDTO>();
+        String where = " WHERE c.idCompra = " + idCompra+" ";
+
+        //mas codigo
+        lista = ControlSistema.getInstancia().getControlCompra().getCompras(pagina, cantidad, where);
+        
+        DetalleCompraDTO detalle = ControlSistema.getInstancia().getControlDetalleCompra().getDetalleCompraByIdCompra(idCompra);
+       
+        CompraDTO compra = lista.get(0);
+        compra.setDetalle(detalle);
+        
+        //FIN CODIGO VARIABLE
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            Gson gson = new Gson();
+            String jsonOutput = gson.toJson(compra);
             out = res.getWriter();
             out.println(jsonOutput);
         } catch (IOException e) {

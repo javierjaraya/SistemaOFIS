@@ -19,7 +19,11 @@ public class CompraDTO {
     public String direccion;
     public String personaRetira;
     public String run;
+    
+    public double total;
 
+    public DetalleCompraDTO detalle;
+    
     public CompraDTO() {
     }
 
@@ -87,6 +91,22 @@ public class CompraDTO {
 
     public void setRun(String run) {
         this.run = run;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public DetalleCompraDTO getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(DetalleCompraDTO detalle) {
+        this.detalle = detalle;
     }
     
     

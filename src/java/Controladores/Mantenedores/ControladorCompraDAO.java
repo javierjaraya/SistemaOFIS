@@ -101,7 +101,9 @@ public class ControladorCompraDAO extends Controlador {
         ArrayList<CompraDTO> retorno = new ArrayList<CompraDTO>();
         try {
             String sql = obtenerSqlFinalPaginacion(
-                    " SELECT * FROM compra c " + where, pagina, cantidad, "c.idCompra DESC");//DESC y ASC
+                    "  SELECT * FROM compra c JOIN "
+                    + " (SELECT dc.idCompra, sum(dc.precio) as total FROM detalle_compra dc GROUP BY dc.idCompra) as detalle "
+                    + " ON c.idCompra = detalle.idCompra  " + where, pagina, cantidad, " c.idCompra DESC");//DESC y ASC
             ResultSet res = conector.getResultSet(sql);
 
             while (res.next()) {
@@ -114,6 +116,7 @@ public class ControladorCompraDAO extends Controlador {
                     compra.setDireccion(res.getString("direccionDespacho"));
                     compra.setPersonaRetira(res.getString("personaRetira"));
                     compra.setRun(res.getString("run"));
+                    compra.setTotal(res.getDouble("total"));
 
                     retorno.add(compra);
 

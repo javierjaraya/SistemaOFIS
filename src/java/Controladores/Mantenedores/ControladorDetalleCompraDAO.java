@@ -51,7 +51,7 @@ public class ControladorDetalleCompraDAO extends Controlador {
     public DetalleCompraDTO getDetalleCompraByIdCompra(int idCompra) {
         DetalleCompraDTO detalle = null;
         try {
-            String sql = " SELECT dc.idDetalle, dc.idCompra, dc.idProducto, dc.precio, dc.cantidad, p.nombreProducto FROM detalle_compra as dc join producto as p on p.idProducto = dc.idProducto where dc.idCompra  WHERE 1 = 1 AND dc.idCompra = " + idCompra + " ORDER BY dc.idCompra DESC";//DESC y ASC
+            String sql = " SELECT dc.idDetalle, dc.idCompra, dc.idProducto, dc.precio, dc.cantidad, p.nombreProducto FROM detalle_compra as dc join producto as p on p.idProducto = dc.idProducto WHERE 1 = 1 AND dc.idCompra = " + idCompra + " ORDER BY dc.idCompra DESC";//DESC y ASC
             ResultSet res = conector.getResultSet(sql);
 
             while (res.next()) {
