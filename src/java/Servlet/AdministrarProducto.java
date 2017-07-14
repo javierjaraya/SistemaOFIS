@@ -6,6 +6,8 @@
 package Servlet;
 
 import Controladores.ControlSistema;
+import Dto.CompraDTO;
+import Dto.DetalleCompraDTO;
 import Dto.ProductoDTO;
 import Dto.ResponseDTO;
 import Dto.ResponseTablaDTO;
@@ -67,6 +69,8 @@ public class AdministrarProducto extends HttpServlet {
                     buscarProducto(request, response);
                 } else if (request.getParameter("accion").equals("BUSCAR_BY_ID")) {
                     buscarProductoByID(request, response);
+                } else if (request.getParameter("accion").equals("LISTADO_BY_PAGINACION")) {
+                    listadoPaginacion(request, response);
                 }
             } else {
                 pagina = "/web/administrarProductos.jsp";
@@ -291,24 +295,35 @@ public class AdministrarProducto extends HttpServlet {
     }
 
     private void borrarProducto(HttpServletRequest req, HttpServletResponse res) {
-        int idProducto = Integer.parseInt(req.getParameter("idProducto"));        
-        
+        int idProducto = Integer.parseInt(req.getParameter("idProducto"));
+
         ResponseDTO responseJson = new ResponseDTO();
         String mensaje = "";
 
-        responseJson.success = ControlSistema.getInstancia().getControlProducto().eliminarProducto(idProducto);
-        
-        if (responseJson.success == true) {
-            responseJson.statusCode = 1;
-            mensaje = "El producto fue eliminado correctamente.";
+        ProductoDTO producto = ControlSistema.getInstancia().getControlProducto().getProductoByID(idProducto);
+        DetalleCompraDTO detalle = ControlSistema.getInstancia().getControlDetalleCompra().getDetalleCompraByIdProducto(idProducto);
+
+        if (detalle == null) {
+
+            responseJson.success = ControlSistema.getInstancia().getControlProducto().eliminarProducto(idProducto);
+
+            if (responseJson.success == true) {
+                responseJson.statusCode = 1;
+                mensaje = "El producto fue eliminado correctamente.";
+            } else {
+                responseJson.statusCode = 0;
+                mensaje = "Se a producido un error inesperado.";
+            }
         } else {
+            responseJson.success = false;
             responseJson.statusCode = 0;
-            mensaje = "Se a producido un error inesperado.";
+            mensaje = "El producto esta relacionado a una compra.";
         }
 
         res.setCharacterEncoding("UTF-8");
         PrintWriter out;
         responseJson.statusText = mensaje;
+        responseJson.data = producto;
         Gson gson = new Gson();
         try {
             String jsonOutput = gson.toJson(responseJson);
@@ -391,7 +406,7 @@ public class AdministrarProducto extends HttpServlet {
 
         ProductoDTO producto = new ProductoDTO();
         producto = lista.get(0);
-        
+
         //FIN CODIGO VARIABLE
         int size = lista.size();
         res.setCharacterEncoding("UTF-8");
@@ -400,6 +415,49 @@ public class AdministrarProducto extends HttpServlet {
         try {
             Gson gson = new Gson();
             String jsonOutput = gson.toJson(responseJson);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void listadoPaginacion(HttpServletRequest req, HttpServletResponse res) {
+        int pagina = 1;
+        try {
+            pagina = Integer.parseInt(req.getParameter("pagina").toString());
+        } catch (Exception e) {
+        }
+
+        String strCant = req.getParameter("por_pagina").toString();
+        int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
+
+        String orden = req.getParameter("orden").toString();
+        if (orden == "Defecto") {
+            orden = "";
+        } else if (orden == "A-Z") {
+            orden = " ORDER BY p.nombreProducto ASC";
+        } else if (orden == "Z-A") {
+            orden = " ORDER BY p.nombreProducto DESC ";
+        } else if (orden == "Menor-Mayor") {
+            orden = " ORDER BY p.precio ASC ";
+        } else if (orden == "Mayor-Menor") {
+            orden = " ORDER BY p.precio DESC ";
+        }
+
+        //CODIGO VARIABLE
+        List<ProductoDTO> lista = new ArrayList<ProductoDTO>();
+        String where = "";
+
+        //mas codigo
+        lista = ControlSistema.getInstancia().getControlProducto().getProductos(pagina, cantidad, where);
+
+        //FIN CODIGO VARIABLE
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            Gson gson = new Gson();
+            String jsonOutput = gson.toJson(lista);
             out = res.getWriter();
             out.println(jsonOutput);
         } catch (IOException e) {
