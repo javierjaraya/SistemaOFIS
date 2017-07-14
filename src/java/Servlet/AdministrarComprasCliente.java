@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author 
  */
-public class AdministrarCarroCompra extends HttpServlet {
+public class AdministrarComprasCliente extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,7 +55,7 @@ public class AdministrarCarroCompra extends HttpServlet {
                     vaciarCarro(request, response);
                 }
             } else {
-                pagina = "/web/administrarCarroCompra.jsp";
+                pagina = "/web/administrarMisCompras.jsp";
                 ServletContext sc = getServletConfig().getServletContext();
                 RequestDispatcher rdNext = sc.getRequestDispatcher(pagina);
                 rdNext.forward(request, response);

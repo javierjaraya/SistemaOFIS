@@ -50,8 +50,10 @@ public class AdministrarCompra extends HttpServlet {
             if (request.getParameter("accion") != null && !request.getParameter("accion").equals("")) {
                 if (request.getParameter("accion").equals("LISTADO")) {
                     listarCompras(request, response);
+                } else if (request.getParameter("accion").equals("LISTADO_MIS_COMPRAS")) {
+                    listarMisCompras(request, response);
                 } else if (request.getParameter("accion").equals("GUARDAR")) {
-                    //guardarUsuario(request, response);
+                    guardarCompra(request, response);
                 } else if (request.getParameter("accion").equals("AGREGAR")) {
                     agregarCompra(request, response);
                 } else if (request.getParameter("accion").equals("BORRAR")) {
@@ -234,16 +236,16 @@ public class AdministrarCompra extends HttpServlet {
 
         //CODIGO VARIABLE
         List<CompraDTO> lista = new ArrayList<CompraDTO>();
-        String where = " WHERE c.idCompra = " + idCompra+" ";
+        String where = " WHERE c.idCompra = " + idCompra + " ";
 
         //mas codigo
         lista = ControlSistema.getInstancia().getControlCompra().getCompras(pagina, cantidad, where);
-        
+
         DetalleCompraDTO detalle = ControlSistema.getInstancia().getControlDetalleCompra().getDetalleCompraByIdCompra(idCompra);
-       
+
         CompraDTO compra = lista.get(0);
         compra.setDetalle(detalle);
-        
+
         //FIN CODIGO VARIABLE
         res.setCharacterEncoding("UTF-8");
         PrintWriter out;
@@ -255,6 +257,81 @@ public class AdministrarCompra extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void listarMisCompras(HttpServletRequest req, HttpServletResponse res) {
+        int pagina = 1;
+        try {
+            pagina = Integer.parseInt(req.getParameter("pagina").toString());
+        } catch (Exception e) {
+        }
+
+        String strCant = "25";
+        int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
+
+        String run = req.getSession().getAttribute("run").toString();
+
+        //CODIGO VARIABLE
+        List<CompraDTO> lista = new ArrayList<CompraDTO>();
+        String where = " WHERE c.run = '" + run + "'";
+
+        //mas codigo
+        lista = ControlSistema.getInstancia().getControlCompra().getCompras(pagina, cantidad, where);
+
+        //FIN CODIGO VARIABLE
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            Gson gson = new Gson();
+            String jsonOutput = gson.toJson(lista);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void guardarCompra(HttpServletRequest req, HttpServletResponse res) {
+        Integer idCompra = 0;
+        String estado = "";
+
+        String parameterNames = "";
+        for (Enumeration e = req.getParameterNames(); e.hasMoreElements();) {
+            parameterNames = (String) e.nextElement();
+            if (parameterNames.equals("idCompra")) {
+                idCompra = Integer.parseInt(req.getParameter("idCompra"));
+            } else if (parameterNames.equals("estado")) {
+                estado = req.getParameter("estado");
+            }
+        }
+
+        CompraDTO compra = ControlSistema.getInstancia().getControlCompra().getCompraByIdCompra(idCompra);
+        compra.setEstado(estado);
+
+        ResponseDTO responseJson = new ResponseDTO();
+
+        responseJson.success = ControlSistema.getInstancia().getControlCompra().actualizarCompra(compra);
+
+        if (responseJson.success) {
+            responseJson.statusCode = 1;
+            responseJson.statusText = "Compra actualizada correctamente.";
+        } else {
+            responseJson.statusCode = 0;
+            responseJson.statusText = "Ocurrio un error inesperado.";
+        }
+
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        responseJson.setData(compra);
+        try {
+            Gson gson = new Gson();
+            String jsonOutput = gson.toJson(responseJson);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

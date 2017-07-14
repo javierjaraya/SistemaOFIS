@@ -6,5 +6,5 @@
 
 <ul>
     <li class="home"><a title="Home" href="login"><span>Inicio</span></a></li>
-    <li><a href="administrarCarroCompra">Compras</a></li>
+    <li><a href="administrarMisCompras">Mis Compras</a></li>
 </ul>

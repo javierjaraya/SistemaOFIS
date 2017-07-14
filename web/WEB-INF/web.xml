@@ -33,8 +33,8 @@
         <url-pattern>/administrarPerfil</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AdministrarCarroCompra</servlet-name>
-        <url-pattern>/administrarCarroCompra</url-pattern>
+        <servlet-name>AdministrarComprasCliente</servlet-name>
+        <url-pattern>/administrarMisCompras</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CatalogoProductos</servlet-name>
@@ -75,8 +75,8 @@
         <servlet-class>Servlet.AdministrarPerfil</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AdministrarCarroCompra</servlet-name>
-        <servlet-class>Servlet.AdministrarCarroCompra</servlet-class>
+        <servlet-name>AdministrarComprasCliente</servlet-name>
+        <servlet-class>Servlet.AdministrarComprasCliente</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdministrarUsuario</servlet-name>

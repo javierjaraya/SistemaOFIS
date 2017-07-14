@@ -5,6 +5,6 @@
 --%>
 
 <ul>
-    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"></i>&nbsp;Ventas</a></li>
-    <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"></i>&nbsp;Productos</a></li>
+    <li class="dropdown" ><a href="administrarCompra"></i>&nbsp;Ventas</a></li>
+    <li class="dropdown"> <a href="administrarProducto"></i>&nbsp;Productos</a></li>
 </ul>

@@ -1,18 +1,19 @@
 <%-- 
-    Document   : administrarCampras
-    Created on : 13-07-2017, 5:01:05
+    Document   : administrarCarroCompra
+    Created on : 13-07-2017, 5:00:00
     Author     : 
 --%>
 
 <%@ include file="header.jsp" %>  
 
 <div class="col-md-12" style="padding: 5px; border: green 1px solid; border-radius: 15px; text-align: center; margin-bottom: 20px;">
-    <h4 class="TextoTituloFormulario"><strong>ADMINISTRAR VENTAS</strong></h4>
+    <h4 class="TextoTituloFormulario"><strong>MIS COMPRAS REALIZADAS</strong></h4>
 </div>
+
 
 <div class="col-md-12" id="subContenedor" style=" padding: 3%; align-content: center; border: green 1px solid; border-radius: 15px; margin-bottom: 20px;">
     <div class="col-md-6">
-        <h5><strong>Ventas</strong></h5>
+        <h5><strong>Compras</strong></h5>
     </div>
     <div class="col-md-12">
         <hr style="border: green 1px solid;">
@@ -112,16 +113,6 @@
                                                 <input type="text" class="form-control" id="total" name="total" readonly>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label" for="estado">Estado</label>
-                                            <div class="col-sm-6">
-                                                <select class="form-control" id="estado" name="estado" >
-                                                    <option value="En bodega">En Bodega</option>
-                                                    <option value="En reparto">En Reparto</option>
-                                                    <option value="Enntregado ">Entregado</option>
-                                                </select>
-                                            </div>
-                                        </div>
                                         <input type="hidden" value="" name="accion" id="accion">
                                     </div>
                                 </section>                           
@@ -129,7 +120,7 @@
                         </div>
                         <div class="modal-footer">
                             <a class="btn btn-default" data-dismiss="modal">Cerrar</a>
-                            <a class="btn btn-success" onclick="guardar()">Guardar</a>
+                            <!--<a class="btn btn-success" onclick="guardar()">Guardar</a>-->
                         </div>   
                     </div>             
                 </form>
@@ -145,7 +136,7 @@
     var tabla = null;
     function cargar() {
         $("#contenidoTabla").empty();
-        var url_json = '/SistemaOFIS/administrarCompra?accion=LISTADO';
+        var url_json = '/SistemaOFIS/administrarCompra?accion=LISTADO_MIS_COMPRAS';
         $.getJSON(
                 url_json,
                 function (datos) {
@@ -211,9 +202,8 @@
                 document.getElementById('personaRetira').value = data.personaRetira;
                 document.getElementById('total').value = "$ "+data.total;                
                 document.getElementById('idProducto').value = data.detalle.idProducto;  
-                document.getElementById('nombreProducto').value = data.detalle.nombreProducto; 
-                document.getElementById('cantidad').value = data.detalle.cantidad;
-                document.getElementById('estado').value = data.estado;
+                document.getElementById('nombreProducto').value = data.detalle.nombreProducto;  
+                document.getElementById('cantidad').value = data.detalle.cantidad; 
 
             }
         });
@@ -221,22 +211,20 @@
 
     function guardar() {
         if (validar()) {
-            document.getElementById("accion").value = "GUARDAR";
-            var url = "/SistemaOFIS/administrarCompra?" + $("#fm").serialize();
+            var url = "/SistemaOFIS/administrarProducto?" + $("#fm").serialize();
             $('#fm').form('submit', {
                 url: url,
                 onSubmit: function () {
                     return $(this).form('validate');
                 },
                 success: function (datos) {
-                    console.log(datos);
                     var datos = eval('(' + datos + ')');
                     if (datos.success) {
-                        $('#dg-modela').modal('hide')
+                        $('#dg-modela-producto').modal('hide')
                         notificacion(datos.statusText, 'success', 'alert');
                         cargar();
                     } else {
-                        $('#dg-modela').modal('hide')
+                        $('#dg-modela-producto').modal('hide')
                         notificacion(datos.statusText, 'danger', 'alert');
                     }
                 }
@@ -245,14 +233,33 @@
     }
 
     function validar() {
-        if (document.getElementById("estado").value == "") {
-            notificacion("Debe seleccionar un estado", 'warning', 'alert-modal');
+        if (document.getElementById("nombreProducto").value == "") {
+            notificacion("Debe ingresar el nombre del producto", 'warning', 'alert-modal');
             return false;
+        } else if (document.getElementById("descripcionProducto").value == "") {
+            notificacion("Debe ingresar la descripcion del producto", 'warning', 'alert-modal');
+            return false;
+        } else if (document.getElementById("stock").value == "") {
+            notificacion("Debe ingresar el stock del producto", 'warning', 'alert-modal');
+            return false;
+        } else if (document.getElementById("precio").value == "") {
+            notificacion("Debe ingresar el precio del producto", 'warning', 'alert-modal');
+            return false;
+        } else if (document.getElementById("idCategoria").value == 0) {
+            notificacion("Debe seleccionar una categoria", 'warning', 'alert-modal');
+            return false;
+        }
+        if (document.getElementById("imagenRemplazada").value == "TRUE") {
+            if (document.getElementById("imagen").value == "") {
+                notificacion("Debe seleccionar una imagen", 'warning', 'alert-modal');
+                return false;
+            } else if (validarArchivo(document.getElementById("imagen").value) == false) {
+                notificacion("El archivo seleccionado no es un formato valido", 'warning', 'alert-modal');
+                return false;
+            }
         }
         return true;
     }
 
 </script>
-
-
 <%@ include file="footer.jsp" %>  

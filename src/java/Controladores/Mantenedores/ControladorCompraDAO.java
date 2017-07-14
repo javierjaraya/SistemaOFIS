@@ -135,7 +135,7 @@ public class ControladorCompraDAO extends Controlador {
     }
 
     public boolean actualizarCompra(CompraDTO compra) {
-        int res = conector.executeUpdate("UPDATE compra SET fechaCompra = ?, estado = ?, metodoDespacho = ?, direccionDespacho = ?, personaRetira = ?, run = ?  WHERE idCompra = ? ", compra.getFechaCompra(), compra.getEstado(), compra.getMetodoDespacho(), compra.getDireccion(), compra.getPersonaRetira(), compra.getRun());
+        int res = conector.executeUpdate("UPDATE compra SET fechaCompra = ?, estado = ?, metodoDespacho = ?, direccionDespacho = ?, personaRetira = ?, run = ?  WHERE idCompra = ? ", compra.getFechaCompra(), compra.getEstado(), compra.getMetodoDespacho(), compra.getDireccion(), compra.getPersonaRetira(), compra.getRun(), compra.getIdCompra());
         return res == 1;
     }
 
