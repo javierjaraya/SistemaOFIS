@@ -13,7 +13,7 @@ import javax.servlet.*;
 
 import javax.servlet.http.*;
 
-public class Login extends HttpServlet {    
+public class Login extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         doPost(req, res);
@@ -45,41 +45,44 @@ public class Login extends HttpServlet {
                 UsuarioDTO usuario = control.getControlUsuario().getUsuarioByRun(txtRun);
 
                 if (usuario.getRun() != null) {
+                    if (usuario.getEstado() != 0) {
+                        if (usuario.getClave().equalsIgnoreCase(txtClave)) {
+                            if (usuario.getIdPerfil() > 0) {
 
-                    if (usuario.getClave().equalsIgnoreCase(txtClave)) {
-                        if (usuario.getIdPerfil() > 0) {
+                                //USUARIO VALIDO
+                                //Carga Perfil
+                                sesion.setMaxInactiveInterval(10 * 60);
+                                sesion.setAttribute("usuario", usuario);
+                                sesion.setAttribute("run", usuario.getRun());
+                                sesion.setAttribute("nombres", usuario.getNombres());
+                                sesion.setAttribute("apellidos", usuario.getApellidos());
+                                sesion.setAttribute("idPerfil", usuario.getIdPerfil());
+                                sesion.setAttribute("nombrePerfil", usuario.getNombrePerfil());
+                                sesion.setAttribute("estado", usuario.getEstado());
+                                sesion.setAttribute("tipoUsuario", usuario.getTipoUsuario());
 
-                            //USUARIO VALIDO
-                            
-                            //Carga Perfil
-                            sesion.setMaxInactiveInterval(10 * 60);
-                            sesion.setAttribute("usuario", usuario);
-                            sesion.setAttribute("run", usuario.getRun());
-                            sesion.setAttribute("nombres", usuario.getNombres());
-                            sesion.setAttribute("apellidos", usuario.getApellidos());
-                            sesion.setAttribute("idPerfil", usuario.getIdPerfil());
-                            sesion.setAttribute("nombrePerfil", usuario.getNombrePerfil());
-                            sesion.setAttribute("estado", usuario.getEstado());
-                            sesion.setAttribute("tipoUsuario", usuario.getTipoUsuario());
-                            
-                            if(usuario.getIdPerfil() == 1){//admin
-                                pagina = "/web/administrarProductos.jsp";
-                            }else if (usuario.getIdPerfil() == 2) {//bodega
-                                pagina = "/web/administrarProductos.jsp";
-                            }else if (usuario.getIdPerfil() == 3){
-                                pagina = "/web/index.jsp";
+                                if (usuario.getIdPerfil() == 1) {//admin
+                                    pagina = "/web/administrarProductos.jsp";
+                                } else if (usuario.getIdPerfil() == 2) {//bodega
+                                    pagina = "/web/administrarProductos.jsp";
+                                } else if (usuario.getIdPerfil() == 3) {
+                                    pagina = "/web/index.jsp";
+                                }
+
+                                sesion.setAttribute("urlActiva", pagina);
+
+                                sesion.setAttribute("mensajeLogin", "Contraseña valida");
+                            } else {
+                                pagina = paginaError;
+                                sesion.setAttribute("mensajeLogin", "No posee el perfil para ingresar al sistema, favor contactar al Administrador.");
                             }
-                            
-                            sesion.setAttribute("urlActiva", pagina);
-
-                            sesion.setAttribute("mensajeLogin", "Contraseña valida");
                         } else {
                             pagina = paginaError;
-                            sesion.setAttribute("mensajeLogin", "No posee el perfil para ingresar al sistema, favor contactar al Administrador.");
+                            sesion.setAttribute("mensajeLogin", "Contraseña invalida, intentelo nuevamente.");
                         }
                     } else {
                         pagina = paginaError;
-                        sesion.setAttribute("mensajeLogin", "Contraseña invalida, intentelo nuevamente.");
+                        sesion.setAttribute("mensajeLogin", "El usuario \"" + req.getParameter("run") + "\" no esta habilitado.");
                     }
                 } else {
                     pagina = paginaError;
