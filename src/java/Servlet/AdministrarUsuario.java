@@ -290,7 +290,7 @@ public class AdministrarUsuario extends HttpServlet {
         PrintWriter out;
         responseJson.data = usuario;
         responseJson.statusText = mensaje;
-
+        
         try {
             Gson gson = new Gson();
             String jsonOutput = gson.toJson(responseJson);

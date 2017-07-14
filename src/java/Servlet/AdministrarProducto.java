@@ -291,7 +291,7 @@ public class AdministrarProducto extends HttpServlet {
     }
 
     private void borrarProducto(HttpServletRequest req, HttpServletResponse res) {
-        int idProducto = Integer.parseInt(req.getParameter("idProducto"));        
+        int idProducto = Integer.parseInt(req.getParameter("idProducto"));       
         
         ResponseDTO responseJson = new ResponseDTO();
         String mensaje = "";
