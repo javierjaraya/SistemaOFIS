@@ -5,8 +5,9 @@
  */
 package Servlet;
 
-import Controladores.Mantenedores.ControladorSolicitudRegistroDAO;
 import Controladores.ControlSistema;
+import Dto.ResponseDTO;
+import Dto.SolicitudRegistroDTO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author 
+ * @author
  */
 public class AdministrarSolicitudRegistro extends HttpServlet {
 
@@ -34,23 +35,23 @@ public class AdministrarSolicitudRegistro extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)    throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        if (request != null && request.isRequestedSessionIdValid() ) {
+
+        if (request != null && request.isRequestedSessionIdValid()) {
             String pagina = "";
             String mensaje1 = "";
             String mensaje2 = "";
 
             if (request.getParameter("accion") != null && !request.getParameter("accion").equals("")) {
                 if (request.getParameter("accion").equals("LISTADO")) {
-                    //listarUsuarios(request, response);
+                    listarSolicitudesRegistro(request, response);
                 } else if (request.getParameter("accion").equals("GUARDAR")) {
                     //guardarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("AGREGAR")) {
                     //agregarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("BORRAR")) {
-                    //borrarUsuario(request, response);
+                    borrarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("BUSCAR")) {
                     //buscarUsuario(request, response);
                 }
@@ -109,6 +110,7 @@ public class AdministrarSolicitudRegistro extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
     private void listarSolicitudesRegistro(HttpServletRequest req, HttpServletResponse res) {
         int pagina = 1;
         try {
@@ -120,11 +122,11 @@ public class AdministrarSolicitudRegistro extends HttpServlet {
         int cantidad = (strCant.equals("")) ? 0 : Integer.parseInt(strCant);
 
         //CODIGO VARIABLE
-        List<ControladorSolicitudRegistroDAO> lista = new ArrayList<ControladorSolicitudRegistroDAO>();
+        List<SolicitudRegistroDTO> lista = new ArrayList<SolicitudRegistroDTO>();
         String where = "";
 
         //mas codigo
-        //lista = ControlSistema.getInstancia().getControlSolicitudRegistro().getSolicitudesRegistro(pagina, cantidad, where);
+        lista = ControlSistema.getInstancia().getControlSolicitudRegistro().getSolicitudesRegistro(pagina, cantidad, where);
 
         //FIN CODIGO VARIABLE
         res.setCharacterEncoding("UTF-8");
@@ -139,4 +141,32 @@ public class AdministrarSolicitudRegistro extends HttpServlet {
         }
     }
 
+    private void borrarUsuario(HttpServletRequest req, HttpServletResponse res) {
+        int idSolicitudBorrar = Integer.parseInt(req.getParameter("idSolicitudBorrar"));
+
+        ResponseDTO responseJson = new ResponseDTO();
+        String mensaje = "";
+
+        responseJson.success = ControlSistema.getInstancia().getControlSolicitudRegistro().eliminarSolicitudRegistro(idSolicitudBorrar);
+
+        if (responseJson.success == true) {
+            responseJson.statusCode = 1;
+            mensaje = "El producto fue eliminado correctamente.";
+        } else {
+            responseJson.statusCode = 0;
+            mensaje = "Se a producido un error inesperado.";
+        }
+
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        responseJson.statusText = mensaje;
+        Gson gson = new Gson();
+        try {
+            String jsonOutput = gson.toJson(responseJson);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
