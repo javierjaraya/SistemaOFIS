@@ -46,7 +46,7 @@
 </div>
 
 <!-- DIALOGO MODAL-->
-<div class="modal fade bs-example-modal-md" id="dg-modela" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal fade bs-example-modal-md" id="dg-modela-producto" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <section id="panel-modal">
@@ -216,7 +216,7 @@
         document.getElementById('accion').value = "GUARDAR";
         document.getElementById('idProducto').value = id;
         $('#modalLabel').html("Editar Producto");
-        $('#dg-modela').modal(this)//CALL MODAL MENSAJE                                    
+        $('#dg-modela-producto').modal(this)//CALL MODAL MENSAJE                                    
         rellenarFormulario(id);
     }
 
@@ -257,27 +257,25 @@
         document.getElementById('imagen').style.display = 'block';
         document.getElementById('imagenPrevisualizada').style.display = 'none';
         $('#modalLabel').html("Crear Producto");
-        $('#dg-modela').modal(this)//CALL MODAL MENSAJE
+        $('#dg-modela-producto').modal(this)//CALL MODAL MENSAJE
     }
 
     function guardar() {
         if (validar()) {
             var url = "/SistemaOFIS/administrarProducto?" + $("#fm").serialize();
-            console.log(url);
             $('#fm').form('submit', {
                 url: url,
                 onSubmit: function () {
                     return $(this).form('validate');
                 },
                 success: function (datos) {
-                    console.log(datos);
                     var datos = eval('(' + datos + ')');
                     if (datos.success) {
-                        $('#dg-modela').modal('hide')
+                        $('#dg-modela-producto').modal('hide')
                         notificacion(datos.statusText, 'success', 'alert');
                         cargar();
                     } else {
-                        $('#dg-modela').modal('hide')
+                        $('#dg-modela-producto').modal('hide')
                         notificacion(datos.statusText, 'danger', 'alert');
                     }
                 }
@@ -330,7 +328,7 @@
     function confirmacion(titulo, mensaje) {
         $('#titulo-confirmacion').html(titulo);
         $('#contenedor-confirmacion').html(mensaje);
-        $('#dg-confirmacion').modal(this)//CALL MODAL MENSAJE
+        $('#dg-confirmacion').modal(this);//CALL MODAL MENSAJE
     }
 
     function borrar(id) {
@@ -345,15 +343,17 @@
         $.ajax({
             type: "POST",
             url: url_json,
-            success: function (result) {                
-                if (result.success) {
-                    $('#dg-modela').modal('hide')
+            success: function (result) {    
+                var result = eval('(' + result + ')');
+                if (result.success == true) {
+                    $('#dg-confirmacion').modal('hide');
                     notificacion(result.statusText, 'success', 'alert');
                     cargar();
-                } else {
-                    $('#dg-modela').modal('hide')
+                } else {    
+                    $('#dg-confirmacion').modal('hide');
                     notificacion(result.statusText, 'danger', 'alert');
                 }
+                
             }
         });
     }

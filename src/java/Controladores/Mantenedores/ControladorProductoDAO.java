@@ -116,7 +116,7 @@ public class ControladorProductoDAO extends Controlador {
     }
     
     public boolean eliminarProducto(int idProducto) {
-        int res = conector.executeUpdate(" DELETE FROM producto p WHERE p.idProducto = "+idProducto);
+        int res = conector.executeUpdate(" DELETE FROM producto WHERE idProducto = "+idProducto);
         return res == 1;
     }
 

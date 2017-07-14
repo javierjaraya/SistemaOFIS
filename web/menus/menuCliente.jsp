@@ -5,7 +5,6 @@
 --%>
 
 <ul>
-    <li class="home"><a title="Home" href="index.jsp"><span>Inicio</span></a></li>
-    <li><a href="#">Comprar</a></li>
-    <li><a href="#">Iniciar Sesion</a></li>
+    <li class="home"><a title="Home" href="login"><span>Inicio</span></a></li>
+    <li><a href="administrarCarroCompra">Compras</a></li>
 </ul>

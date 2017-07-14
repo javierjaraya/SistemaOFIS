@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>CatalogoProductos</servlet-name>
+        <servlet-class>Servlet.CatalogoProductos</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AdministrarCategoria</servlet-name>
         <url-pattern>/administrarCategoria</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>AdministrarCarroCompra</servlet-name>
         <url-pattern>/administrarCarroCompra</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CatalogoProductos</servlet-name>
+        <url-pattern>/catalogoProductos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

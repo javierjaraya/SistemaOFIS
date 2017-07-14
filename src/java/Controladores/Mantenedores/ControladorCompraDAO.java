@@ -142,7 +142,7 @@ public class ControladorCompraDAO extends Controlador {
     }
 
     public boolean insertarCompra(CompraDTO compra) {
-        int res = conector.executeInsert("INSERT INTO compra (idCompra, fechaCompra, estado, metodoDespacho, direccionDespacho, personaRetira, run) VALUES (?,?,?,?,?,?,?)", compra.getIdCompra(), compra.getFechaCompra(), compra.getEstado(), compra.getMetodoDespacho(), compra.getDireccion(), compra.getPersonaRetira(), compra.getRun());
+        int res = conector.executeInsert("INSERT INTO compra ( fechaCompra, estado, metodoDespacho, direccionDespacho, personaRetira, run) VALUES (now(),?,?,?,?,?)", compra.getEstado(), compra.getMetodoDespacho(), compra.getDireccion(), compra.getPersonaRetira(), compra.getRun());
         return res > 0;
     }
 }
