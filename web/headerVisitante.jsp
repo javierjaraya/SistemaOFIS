@@ -31,7 +31,10 @@
                 <div class="col-md-1">
                     <a href="#"><img src="/SistemaOFIS/img/log.png" title="Ofis" /></a>
                 </div>
-                <div class="col-md-11">
+                <div class="col-md-5">
+                    <h3 href="#" style="padding-top: 10px"><strong>OFIS Venta de artículos de oficina </strong></h3>
+                </div>
+                <div class="col-md-6">
                     <div style="text-align: right">
                         <h8>Bienvenido/a visitante</h8>
                     </div>
