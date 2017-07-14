@@ -8,6 +8,7 @@ package Servlet;
 import Controladores.ControlSistema;
 import Dto.ResponseDTO;
 import Dto.SolicitudRegistroDTO;
+import Dto.UsuarioDTO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -52,6 +53,8 @@ public class AdministrarSolicitudRegistro extends HttpServlet {
                     //agregarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("BORRAR")) {
                     borrarUsuario(request, response);
+                } else if (request.getParameter("accion").equals("ACEPTAR")) {
+                    aceptarUsuario(request, response);
                 } else if (request.getParameter("accion").equals("BUSCAR")) {
                     //buscarUsuario(request, response);
                 }
@@ -143,23 +146,52 @@ public class AdministrarSolicitudRegistro extends HttpServlet {
 
     private void borrarUsuario(HttpServletRequest req, HttpServletResponse res) {
         int idSolicitudBorrar = Integer.parseInt(req.getParameter("idSolicitudBorrar"));
-
         ResponseDTO responseJson = new ResponseDTO();
         String mensaje = "";
-
-        responseJson.success = ControlSistema.getInstancia().getControlSolicitudRegistro().eliminarSolicitudRegistro(idSolicitudBorrar);
-
+        SolicitudRegistroDTO solicitud = ControlSistema.getInstancia().getControlSolicitudRegistro().getSolicitudRegistroByIdSolicitud(idSolicitudBorrar);
+        responseJson.success = ControlSistema.getInstancia().getControlSolicitudRegistro().eliminarSolicitudRegistro(solicitud.getIdSolicitud());
+        boolean status = ControlSistema.getInstancia().getControlUsuario().eliminarUsuario(solicitud.getRun());
         if (responseJson.success == true) {
             responseJson.statusCode = 1;
-            mensaje = "El producto fue eliminado correctamente.";
+            mensaje = "El usuario fue eliminado.";
         } else {
             responseJson.statusCode = 0;
-            mensaje = "Se a producido un error inesperado.";
+            mensaje = "Se a producido un error inesperado al intentar eliminar el usuario.";
         }
-
         res.setCharacterEncoding("UTF-8");
         PrintWriter out;
         responseJson.statusText = mensaje;
+        responseJson.data = solicitud;
+        Gson gson = new Gson();
+        try {
+            String jsonOutput = gson.toJson(responseJson);
+            out = res.getWriter();
+            out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void aceptarUsuario(HttpServletRequest req, HttpServletResponse res) {
+        int idSolicitudConfirmar = Integer.parseInt(req.getParameter("idSolicitudConfirmar"));
+        ResponseDTO responseJson = new ResponseDTO();
+        String mensaje = "";
+        SolicitudRegistroDTO solicitud = ControlSistema.getInstancia().getControlSolicitudRegistro().getSolicitudRegistroByIdSolicitud(idSolicitudConfirmar);
+        UsuarioDTO user = ControlSistema.getInstancia().getControlUsuario().getUsuarioByRun(solicitud.getRun());
+        responseJson.success = ControlSistema.getInstancia().getControlSolicitudRegistro().eliminarSolicitudRegistro(solicitud.getIdSolicitud());
+        user.setEstado(1);
+        boolean status = ControlSistema.getInstancia().getControlUsuario().actualizarUsuario(user);
+        if (responseJson.success == true) {
+            responseJson.statusCode = 1;
+            mensaje = "El usuario fue aceptado.";
+        } else {
+            responseJson.statusCode = 0;
+            mensaje = "Se a producido un error inesperado al intentar aceptar el usuario.";
+        }
+        res.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        responseJson.statusText = mensaje;
+        responseJson.data = solicitud;
         Gson gson = new Gson();
         try {
             String jsonOutput = gson.toJson(responseJson);

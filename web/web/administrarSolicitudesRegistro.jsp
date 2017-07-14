@@ -29,12 +29,15 @@
             </tbody>
         </table>
         <input type="hidden" id ="accion" name ="accion">
+
     </div>
 </div>
+<input type="hidden" value="" id="idSolicitudConfirmar" name="idSolicitudConfirmar">
 <!-- MODAL CONFIRMACION-->
 <div class="modal fade bs-example-modal-sm" id="dg-confirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
+            <div id="alert-modal"></div>
             <section id="panel-modal">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -105,7 +108,21 @@
         );
     }
     function confirmar(id) {
-
+        document.getElementById('idSolicitudConfirmar').value = id;
+        var url_json = "/SistemaOFIS/administrarSolicitudRegistro?accion=ACEPTAR&idSolicitudConfirmar=" + id;
+        $.ajax({
+            type: "POST",
+            url: url_json,
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.success) {
+                    notificacion(result.statusText, 'success', 'alert');
+                    cargarUsuarios();
+                } else {
+                    notificacion(result.statusText, 'danger', 'alert');
+                }
+            }
+        });
     }
     function eliminar(id) {
         confirmacion('Confirmacion', '¿Esta seguro?, una vez eliminado no se podran recuperar los datos.');
@@ -123,12 +140,15 @@
             type: "POST",
             url: url_json,
             success: function (result) {
+                var result = eval('(' + result + ')');
                 if (result.success) {
-                    $('#dg-modela').modal('hide')
+                    
+                    $('#dg-confirmacion').modal('hide');   
                     notificacion(result.statusText, 'success', 'alert');
                     cargarUsuarios();
                 } else {
-                    $('#dg-modela').modal('hide')
+                     
+                    $('#dg-confirmacion').modal('hide');  
                     notificacion(result.statusText, 'danger', 'alert');
                 }
             }
