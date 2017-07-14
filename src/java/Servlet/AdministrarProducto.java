@@ -301,10 +301,9 @@ public class AdministrarProducto extends HttpServlet {
         String mensaje = "";
 
         ProductoDTO producto = ControlSistema.getInstancia().getControlProducto().getProductoByID(idProducto);
-        DetalleCompraDTO detalle = ControlSistema.getInstancia().getControlDetalleCompra().getDetalleCompraByIdProducto(idProducto);
+        List<DetalleCompraDTO> detalles = ControlSistema.getInstancia().getControlDetalleCompra().getDetalleCompraByIdProducto(idProducto);
 
-        if (detalle == null) {
-
+        if (detalles.size() == 0) {
             responseJson.success = ControlSistema.getInstancia().getControlProducto().eliminarProducto(idProducto);
 
             if (responseJson.success == true) {

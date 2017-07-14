@@ -60,8 +60,15 @@ public class Login extends HttpServlet {
                             sesion.setAttribute("idPerfil", usuario.getIdPerfil());
                             sesion.setAttribute("nombrePerfil", usuario.getNombrePerfil());
                             sesion.setAttribute("estado", usuario.getEstado());
-
-                            pagina = "/web/index.jsp";
+                            
+                            if(usuario.getIdPerfil() == 1){//admin
+                                pagina = "/web/administrarProductos.jsp";
+                            }else if (usuario.getIdPerfil() == 2) {//bodega
+                                pagina = "/web/administrarProductos.jsp";
+                            }else if (usuario.getIdPerfil() == 3){
+                                pagina = "/web/index.jsp";
+                            }
+                            
                             sesion.setAttribute("urlActiva", pagina);
 
                             sesion.setAttribute("mensajeLogin", "Contraseña valida");

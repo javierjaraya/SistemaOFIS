@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import Controladores.ControlSistema;
 import Dto.ResponseDTO;
 import Dto.ResponseTablaDTO;
+import Dto.SolicitudRegistroDTO;
 import Dto.UsuarioDTO;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import javax.servlet.http.*;
 
 /**
  *
- * @author 
+ * @author
  */
 public class AdministrarUsuario extends HttpServlet {
 
@@ -43,8 +44,8 @@ public class AdministrarUsuario extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-                
-        if (request != null && request.isRequestedSessionIdValid() ) {
+
+        if (request != null && request.isRequestedSessionIdValid()) {
             String pagina = "";
             String mensaje1 = "";
             String mensaje2 = "";
@@ -76,7 +77,7 @@ public class AdministrarUsuario extends HttpServlet {
             RequestDispatcher rdNext = sc.getRequestDispatcher(pagina);
             rdNext.forward(request, response);
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -115,7 +116,7 @@ public class AdministrarUsuario extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
     private void listarUsuarios(HttpServletRequest req, HttpServletResponse res) {
         int pagina = 1;
         try {
@@ -259,6 +260,8 @@ public class AdministrarUsuario extends HttpServlet {
             }
         }
 
+        UsuarioDTO usuaioBD = ControlSistema.getInstancia().getControlUsuario().getUsuarioByRun(run);
+
         UsuarioDTO usuario = new UsuarioDTO();
         usuario.setTelefono(telefono);
         usuario.setIdPerfil(idPerfil);
@@ -274,23 +277,31 @@ public class AdministrarUsuario extends HttpServlet {
 
         ResponseDTO responseJson = new ResponseDTO();
         String mensaje = "";
+        if (usuaioBD == null) {
 
-        responseJson.success = ControlSistema.getInstancia().getControlUsuario().insertarUsuario(usuario);
-        
+            responseJson.success = ControlSistema.getInstancia().getControlUsuario().insertarUsuario(usuario);
+            
+            SolicitudRegistroDTO solicitud = new SolicitudRegistroDTO();
+            solicitud.setRun(run);
+            boolean status = ControlSistema.getInstancia().getControlSolicitudRegistro().insertarSolicitudRegistro(solicitud);
 
-        if (responseJson.success) {
-            responseJson.statusCode = 1;
-            mensaje = "Usuario agregado correctamente.";
+            if (responseJson.success) {
+                responseJson.statusCode = 1;
+                mensaje = "Usuario agregado correctamente.";
+            } else {
+                responseJson.statusCode = 0;
+                mensaje = "Se a producido un error inesperado.";
+            }
         } else {
             responseJson.statusCode = 0;
-            mensaje = "Se a producido un error inesperado.";
+            mensaje = "El usuario ya existe.";
         }
 
         res.setCharacterEncoding("UTF-8");
         PrintWriter out;
         responseJson.data = usuario;
         responseJson.statusText = mensaje;
-        
+
         try {
             Gson gson = new Gson();
             String jsonOutput = gson.toJson(responseJson);

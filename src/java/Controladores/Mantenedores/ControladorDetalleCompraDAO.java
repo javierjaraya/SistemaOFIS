@@ -9,6 +9,8 @@ import Controladores.Mantenedores.Nucleo.Controlador;
 import Dto.DetalleCompraDTO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -76,8 +78,8 @@ public class ControladorDetalleCompraDAO extends Controlador {
         return detalle;
     }
 
-    public DetalleCompraDTO getDetalleCompraByIdProducto(int idProducto) {
-        DetalleCompraDTO detalle = null;
+    public List<DetalleCompraDTO> getDetalleCompraByIdProducto(int idProducto) {
+        List<DetalleCompraDTO> retorno = new ArrayList<DetalleCompraDTO>();
         try {
             String sql = " SELECT dc.idDetalle, dc.idCompra, dc.idProducto, dc.precio, dc.cantidad, p.nombreProducto FROM detalle_compra as dc join producto as p on p.idProducto = dc.idProducto where dc.idCompra  WHERE 1 = 1 AND dc.idProducto = " + idProducto + " ORDER BY dc.idProducto DESC";//DESC y ASC
             ResultSet res = conector.getResultSet(sql);
@@ -85,13 +87,15 @@ public class ControladorDetalleCompraDAO extends Controlador {
             if (res != null) {
                 while (res.next()) {
                     try {
-                        detalle = new DetalleCompraDTO();
+                        DetalleCompraDTO detalle = new DetalleCompraDTO();
                         detalle.setIdDetalle(res.getInt("idDetalle"));
                         detalle.setIdCompra(res.getInt("idCompra"));
                         detalle.setIdProducto(res.getInt("idProducto"));
                         detalle.setPrecio(res.getDouble("precio"));
                         detalle.setCantidad(res.getInt("cantidad"));
                         detalle.setNombreProducto(res.getString("nombreProducto"));
+                        
+                        retorno.add(detalle);
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -105,7 +109,7 @@ public class ControladorDetalleCompraDAO extends Controlador {
             conector.close();
         }
 
-        return detalle;
+        return retorno;
     }
 
     public boolean actualizarDetalleCompra(DetalleCompraDTO detalle) {
