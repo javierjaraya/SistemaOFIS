@@ -153,7 +153,14 @@ public class AdministrarCompra extends HttpServlet {
         detalle.setIdCompra(idCompra);
         detalle.setIdProducto(idProducto);
         detalle.setCantidad(cantidad);
-        detalle.setPrecio(producto.getPrecio() * cantidad);
+
+        if (usuario.getTipoUsuario().equalsIgnoreCase("Natural")) {
+            //SI PERSONA NATURAL CON IVA
+            detalle.setPrecio(Math.round((producto.getPrecio() * cantidad) + (producto.getPrecio() * cantidad) * 0.19));
+        } else {
+            //SI NO SIN IVA (EMPRESA)
+            detalle.setPrecio(producto.getPrecio() * cantidad);
+        }
 
         ResponseDTO responseJson = new ResponseDTO();
 

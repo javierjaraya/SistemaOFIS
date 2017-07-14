@@ -60,6 +60,7 @@ public class Login extends HttpServlet {
                             sesion.setAttribute("idPerfil", usuario.getIdPerfil());
                             sesion.setAttribute("nombrePerfil", usuario.getNombrePerfil());
                             sesion.setAttribute("estado", usuario.getEstado());
+                            sesion.setAttribute("tipoUsuario", usuario.getTipoUsuario());
                             
                             if(usuario.getIdPerfil() == 1){//admin
                                 pagina = "/web/administrarProductos.jsp";

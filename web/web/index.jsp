@@ -6,6 +6,8 @@
 
 <%@ include file="header.jsp" %>   
 
+<input type="hidden" value="<%= session.getAttribute("tipoUsuario") %>" id="tipoUsuario" name="tipoUsuario">
+
 <div class="row">
     <div class="col-xs-12">        
         <div class="box">            
@@ -89,9 +91,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-4 control-label" for="precio">Total $</label>
+                                            <label class="col-sm-4 control-label" for="total">Total $</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control" id="total" name="total" placeholder="$" readonly>
+                                            </div>                                        
+                                        </div>
+                                        <div class="form-group" id="div-total-iva">
+                                            <label class="col-sm-4 control-label" for="totalConIva">Total $ + IVA 19%</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="totalConIva" name="totalConIva" placeholder="$" readonly>
                                             </div>                                        
                                         </div>
                                         <div class="form-group">
@@ -183,9 +191,17 @@
     }
 
     function actulizarTotal() {
+        var tipoUsuario = document.getElementById("tipoUsuario").value;
         var precio = document.getElementById('precio').value;
         var cantidad = document.getElementById('cantidad').value;
         document.getElementById('total').value = "$ " + number_format((precio * cantidad), 0);
+        if(tipoUsuario == "Natural"){
+            document.getElementById("div-total-iva").style.display = 'block';
+            document.getElementById('totalConIva').value = "$ " + number_format(((precio * cantidad)+(precio * cantidad)*0.19), 0);
+        }else{
+            document.getElementById("div-total-iva").style.display = 'none';
+        }
+        
     }
 
     function pagar() {

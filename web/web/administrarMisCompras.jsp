@@ -113,6 +113,12 @@
                                                 <input type="text" class="form-control" id="total" name="total" readonly>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label" for="estado">Estado</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="estado" name="estado" readonly>
+                                            </div>
+                                        </div>
                                         <input type="hidden" value="" name="accion" id="accion">
                                     </div>
                                 </section>                           
@@ -204,6 +210,7 @@
                 document.getElementById('idProducto').value = data.detalle.idProducto;  
                 document.getElementById('nombreProducto').value = data.detalle.nombreProducto;  
                 document.getElementById('cantidad').value = data.detalle.cantidad; 
+                document.getElementById('estado').value = data.estado; 
 
             }
         });
